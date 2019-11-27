@@ -1,2 +1,6 @@
+public
+/dev-data/img
+/dev-data/templates
+.gitignore
 node_modules
 tours-simple1.json
