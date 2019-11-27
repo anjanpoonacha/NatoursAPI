@@ -1,0 +1,38 @@
+{
+  "name": "natours",
+  "version": "1.0.0",
+  "description": "Learning Express to build API and Later work with mongoDB and Mongoose",
+  "main": "app.js",
+  "scripts": {
+    "start": "npm run start:dev",
+    "start:app": "nodemon server.js",
+    "start:prod": "set NODE_ENV=production&& nodemon server.js",
+    "start:dev": "nodemon server.js",
+    "import:allTours": "node dev-data/data/import-dev-data.js --import",
+    "delete:allTours": "node dev-data/data/import-dev-data.js --delete"
+  },
+  "author": "Anjan Poonacha",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.12",
+    "morgan": "^1.9.1",
+    "slugify": "^1.3.6",
+    "validator": "^12.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "prettier": "^1.19.1"
+  },
+  "engines": {
+    "node": "10.0.0"
+  }
+}
