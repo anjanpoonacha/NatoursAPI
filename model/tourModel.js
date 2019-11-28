@@ -92,7 +92,7 @@ tourSchema.virtual('durationWeeks').get(function() {
 // DOCUMENT MIDDLEWARE
 /* --------PRE SAVE HOOK------ */
 tourSchema.pre('save', function() {
-  console.log(this);
+  // console.log(this);
   this.slug = slugify(this.name, { lower: true }); // ADD SLUG IN THE SCHEMA
 });
 
@@ -114,6 +114,7 @@ tourSchema.pre('aggregate', function(next) {
   next();
 });
 
+// eslint-disable-next-line new-cap
 const Tour = new mongoose.model(`Tour`, tourSchema);
 
 module.exports = Tour;
