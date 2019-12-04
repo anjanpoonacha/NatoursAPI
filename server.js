@@ -22,6 +22,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
+  // eslint-disable-next-line no-unused-vars
   .then(con => console.log(`Connection is established`));
 // .catch(err => console.log('ERROR'));
 
