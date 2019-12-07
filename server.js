@@ -28,8 +28,8 @@ mongoose
 
 const app = require('./app');
 
-let port = process.env.PORT;
-if (process.env.NODE_ENV === 'production') port = 3000;
+const port = process.env.PORT;
+// if (process.env.NODE_ENV === 'production') port = 3000;
 const server = app.listen(port, () => {
   console.log(`Listening at port ${port}`);
 });
