@@ -4,3 +4,4 @@ public
 .gitignore
 node_modules
 tours-simple1.json
+config.env
