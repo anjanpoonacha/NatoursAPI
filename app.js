@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 
 const tourRouter = require('./routes/tourRouter');
 const userRouter = require('./routes/userRouter');
+const reviewRouter = require('./routes/reviewRouter');
 
 const globalErrorHandler = require('./controller/errorController');
 const AppError = require('./utils/appError');
@@ -68,6 +69,7 @@ app.use((req, res, next) => {
 // ERROR HANDLING
 app.use(`/api/v1/tours`, tourRouter);
 app.use(`/api/v1/users`, userRouter);
+app.use(`/api/v1/reviews`, reviewRouter);
 
 app.all('*', (req, res, next) => {
   // const err = new Error(`Can't find ${req.originalUrl} on this server`);
