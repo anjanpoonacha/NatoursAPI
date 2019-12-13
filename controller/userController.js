@@ -1,6 +1,7 @@
 const catchAsync = require('./../utils/catchAsync');
 const User = require('../model/userModel');
 const AppError = require('./../utils/appError');
+const factory = require('./handlerFactory');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -9,19 +10,6 @@ const filterObj = (obj, ...allowedFields) => {
   });
   return newObj;
 };
-
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    requestedAt: req.requestTime,
-    status: 'SUCCESS',
-    numResults: users.length,
-    data: {
-      users
-    }
-  });
-});
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
@@ -46,6 +34,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+// exports.getMe=;
+
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
@@ -58,24 +48,12 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: `error`,
-    message: `This route is not implemented yet`
+    message: `This route is not implemented, Use Sign Up instead.`
   });
 };
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: `error`,
-    message: `This route is not implemented yet`
-  });
-};
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: `error`,
-    message: `This route is not implemented yet`
-  });
-};
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: `error`,
-    message: `This route is not implemented yet`
-  });
-};
+
+exports.getAllUsers = factory.getAll(User);
+// Do not update the password here
+exports.getUser = factory.getOne(User); // Admin
+exports.updateUser = factory.updateOne(User); // Admin
+exports.deleteUser = factory.deleteOne(User);

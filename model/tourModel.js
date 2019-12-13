@@ -112,7 +112,7 @@ const tourSchema = new mongoose.Schema(
     ]
   },
   {
-    toJSON: { virtuals: false },
+    toJSON: { virtuals: true },
     toObject: { virtuals: true }
   }
 );
@@ -121,7 +121,15 @@ tourSchema.virtual('durationWeeks').get(function() {
   return this.duration / 7;
 });
 
+tourSchema.virtual('reviews', {
+  // populate getTour
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id'
+});
+
 // DOCUMENT MIDDLEWARE
+
 /* --------PRE SAVE HOOK------ */
 tourSchema.pre('save', function() {
   // console.log(this);
@@ -131,10 +139,10 @@ tourSchema.pre('save', function() {
 /** EMBEDDING THE GUIDES DOCUMENT IN TOUR DOCUMENT
  
  * tourSchema.pre('save', async function(next) {
- * const guidesPromises = this.guides.map(async el => await User.find(el));
- * this.guides = await Promise.all(guidesPromises);
- * next();
- * }); */
+   * const guidesPromises = this.guides.map(async el => await User.find(el));
+   * this.guides = await Promise.all(guidesPromises);
+   * next();
+   * }); */
 
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } }); //  ADD secretTour IN THE SCHEMA
