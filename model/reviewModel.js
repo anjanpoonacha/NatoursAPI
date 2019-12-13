@@ -18,24 +18,23 @@ const reviewSchema = mongoose.Schema(
     tour: {
       type: mongoose.Schema.ObjectId,
       ref: 'Tour',
-      required: [true, 'A review must belong to a tour']
+      required: [true, 'A review must have to a tour']
     },
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
-      required: [true, 'A review must belong to a user']
+      required: [true, 'A review must have to a user']
     }
   },
   {
-    // toJSON: { virtuals: true },
+    toJSON: { virtuals: true },
     toObject: { virtuals: true }
   }
 );
 
 reviewSchema.pre(/^find/, function(next) {
-  this.find()
-    .populate({ path: 'user', select: 'name photo' })
-    .populate({ path: 'tour', select: 'name' });
+  this.find().populate({ path: 'user', select: 'name photo' });
+  // .populate({ path: 'tour', select: 'name' });
   next();
 });
 
