@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
+router.patch('/resetPassword/:token', authController.resetPassword);
+router.post('/forgotPassword', authController.forgotPassword);
 
 // router.patch('/reActivate', async (req, res, next) => {
 //   try {
@@ -25,25 +27,19 @@ router.post('/login', authController.login);
 //   }
 // });
 
-router.patch(
-  '/updateMyPassword',
-  authController.protect,
-  authController.updatePassword
-);
+// The following Middleware is now protected by this line of code
+router.use(authController.protect);
 
-router.get(
-  '/me',
-  authController.protect,
-  userController.getMe,
-  userController.getUser
-);
+router.patch('/updateMyPassword', authController.updatePassword);
 
-router.patch('/updateMe', authController.protect, userController.updateMe);
-router.delete('/deleteMe', authController.protect, userController.deleteMe);
+router.get('/me', userController.getMe, userController.getUser);
 
-router.post('/forgotPassword', authController.forgotPassword);
-router.patch('/resetPassword/:token', authController.resetPassword);
+router.patch('/updateMe', userController.updateMe);
+router.delete('/deleteMe', userController.deleteMe);
 
+// These Middlewares should only be executed by admins
+
+router.use(authController.restrictTo('admin'));
 router
   .route(`/`)
   .get(userController.getAllUsers)
