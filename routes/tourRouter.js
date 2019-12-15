@@ -30,8 +30,12 @@ router
 //  /tours-within?distance=250&center=-10,30&unit=mi
 //  /tours-within/250/center/-10,30/unit/mi --> instead
 router
-  .route('tours-within/:distance/center/:latlng/unit/:unit')
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
   .get(tourController.toursWithin);
+
+router
+  .route('/tours-within/distances/:latlng/unit/:unit')
+  .get(tourController.getDistances);
 
 router
   .route('/')

@@ -118,6 +118,7 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+tourSchema.index({ startLocation: '2dsphere' });
 tourSchema.index({ slug: 1 });
 tourSchema.index({ ratingsAverage: 1, price: 1 });
 
@@ -166,8 +167,15 @@ tourSchema.post(/^find/, function(docs, next) {
 });
 
 tourSchema.pre('aggregate', function(next) {
+  if (Object.keys(this.pipeline()[0])[0] === '$geoNear') {
+    this.pipeline().splice(1, 0, {
+      $match: { secretTour: { $ne: true } }
+    });
+    return next();
+  }
+
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  // console.log(this.pipeline());
+
   next();
 });
 

@@ -1,9 +1,7 @@
 const Tour = require('./../model/tourModel');
 const factory = require('./handlerFactory');
 const catchAsync = require('./../utils/catchAsync');
-
-// const AppError = require('./../utils/appError');
-// const APIFeatures = require('./../utils/apiFeatures');
+const AppError = require('./../utils/appError');
 
 /* -------------------- ALIASING ------------------- */
 
@@ -95,6 +93,78 @@ exports.getMonthlyPlan = catchAsync(async (req, res) => {
   });
 });
 
+exports.toursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Please provide the latitude and longitude in the format lat,lng',
+        400
+      )
+    );
+  }
+
+  const radius = unit === 'mi' ? distance / 3963.3 : distance / 6378.1;
+
+  const tours = await Tour.find({
+    startLocation: {
+      $geoWithin: {
+        $centerSphere: [[lng, lat], radius]
+      }
+    }
+  });
+
+  res.status(200).json({
+    status: 'SUCCESS',
+    nTours: tours.length,
+    data: {
+      tours
+    }
+  });
+});
+
+exports.getDistances = catchAsync(async (req, res, next) => {
+  const { latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Please provide the latitude and longitude in the format lat,lng',
+        400
+      )
+    );
+  }
+
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.0001;
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [lng * 1, lat * 1]
+        },
+        distanceField: 'distance',
+        distanceMultiplier: multiplier
+      }
+    },
+    {
+      $project: {
+        name: 1,
+        distance: 1
+      }
+    }
+  ]);
+  res.status(200).json({
+    status: 'SUCCESS',
+
+    data: {
+      distances
+    }
+  });
+});
+
 exports.getAllTours = factory.getAll(Tour);
 exports.getTour = factory.getOne(Tour, { path: 'reviews' });
 exports.createTour = factory.createOne(Tour);
@@ -108,17 +178,17 @@ exports.deleteTour = factory.deleteOne(Tour);
 //
 
 /* const tours = JSON.parse(
-      fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-      );
-      */
+        fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
+        );
+        */
 
 //
 
 /* exports.checkBody = (req, res, next) => {
-       if (!req.body.name || !req.body.price) {
-         return res.status(400).json({
-           status: 'fail',
-           message: 'Cannot find Price or Name'
+         if (!req.body.name || !req.body.price) {
+           return res.status(400).json({
+             status: 'fail',
+             message: 'Cannot find Price or Name'
           });
         }
         next();
