@@ -27,6 +27,12 @@ router
   .route('/top-5-cheap')
   .get(tourController.aliasTopTours, tourController.getAllTours);
 
+//  /tours-within?distance=250&center=-10,30&unit=mi
+//  /tours-within/250/center/-10,30/unit/mi --> instead
+router
+  .route('tours-within/:distance/center/:latlng/unit/:unit')
+  .get(tourController.toursWithin);
+
 router
   .route('/')
   .get(tourController.getAllTours)
