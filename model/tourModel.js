@@ -167,10 +167,14 @@ tourSchema.post(/^find/, function(docs, next) {
 });
 
 tourSchema.pre('aggregate', function(next) {
-  if (Object.keys(this.pipeline()[0])[0] === '$geoNear') {
+  const firstStage = Object.keys(this.pipeline()[0])[0];
+
+  if (firstStage === '$geoNear') {
+    // Insert the stage at index 1
     this.pipeline().splice(1, 0, {
       $match: { secretTour: { $ne: true } }
     });
+
     return next();
   }
 
