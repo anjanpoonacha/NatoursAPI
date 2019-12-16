@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -9,11 +10,22 @@ const xss = require('xss-clean');
 const tourRouter = require('./routes/tourRouter');
 const userRouter = require('./routes/userRouter');
 const reviewRouter = require('./routes/reviewRouter');
+const viewRouter = require('./routes/viewRouter');
 
 const globalErrorHandler = require('./controller/errorController');
 const AppError = require('./utils/appError');
 
 const app = express();
+
+// SETTING UP PUG ENGINE
+app.set('view engine', 'pug');
+
+//  DEFINING THE LOCATION OF THE 'VIEWS' FOLDER
+app.set('views', path.join(__dirname, 'views'));
+
+// SERVING STATIC FILES
+// app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // 1) GLOBAL MIDDLEWARE
 
@@ -57,20 +69,18 @@ app.use(
   })
 );
 
-// SERVING STATIC FILES
-app.use(express.static(`${__dirname}/public`));
-
 app.use((req, res, next) => {
   req.requestTime = new Date().toUTCString();
   // console.log(req.headers);
   next();
 });
 
-// ERROR HANDLING
+app.use(`/`, viewRouter);
 app.use(`/api/v1/tours`, tourRouter);
 app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/reviews`, reviewRouter);
 
+// ERROR HANDLING
 app.all('*', (req, res, next) => {
   // const err = new Error(`Can't find ${req.originalUrl} on this server`);
   // err.status = 'FAIL';
