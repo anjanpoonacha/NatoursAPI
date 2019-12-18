@@ -1,4 +1,5 @@
-public
+/.vscode
+/.cache
 /dev-data/img
 /dev-data/templates
 .gitignore

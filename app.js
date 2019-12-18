@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const hpp = require('hpp');
 const xss = require('xss-clean');
+const cookieParser = require('cookie-parser');
 
 const tourRouter = require('./routes/tourRouter');
 const userRouter = require('./routes/userRouter');
@@ -49,6 +50,7 @@ app.use('/api', limiter);
 
 // BODY PARSER
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 // DATA SANITIZE AGAINST NoSQL QUERY INJECTION
 app.use(mongoSanitize());
@@ -71,7 +73,7 @@ app.use(
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toUTCString();
-  // console.log(req.headers);
+  console.log(req.cookies);
   next();
 });
 
