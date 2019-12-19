@@ -97,8 +97,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.cookies.jwt;
   }
 
-  if (!token) {
-    return next(new AppError('You must login first', 401));
+  if (!token || req.cookies.jwt === 'loggedout') {
+    return next(
+      new AppError('You are not logged in! Please log in to get access', 401)
+    );
   }
 
   // 2. Verification token
@@ -126,6 +128,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 });
 

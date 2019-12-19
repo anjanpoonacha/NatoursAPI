@@ -11,6 +11,7 @@ process.on('uncaughtException', err => {
 
 dotenv.config({ path: './config.env' });
 
+// eslint-disable-next-line no-unused-vars
 const DB = process.env.DATABASE.replace(
   `<PASSWORD>`,
   process.env.DATABASE_PASSWORD
@@ -25,7 +26,7 @@ mongoose
     useUnifiedTopology: true
   })
   // eslint-disable-next-line no-unused-vars
-  .then(con => console.log(`Connection is established`));
+  .then(con => console.log(`DB connection established`));
 // .catch(err => console.log('ERROR'));
 
 const app = require('./app');
