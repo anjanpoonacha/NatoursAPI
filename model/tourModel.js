@@ -151,7 +151,7 @@ tourSchema.pre('save', function() {
 
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } }); //  ADD secretTour IN THE SCHEMA
-  this.start = Date.now();
+  // this.start = Date.now();
   next();
 });
 
@@ -162,7 +162,7 @@ tourSchema.pre(/^find/, function(next) {
 
 tourSchema.post(/^find/, function(docs, next) {
   // console.log(docs);
-  console.log(`Query is executed in ${Date.now() - this.start}`);
+  // console.log(`Query is executed in ${Date.now() - this.start}`);
   next();
 });
 

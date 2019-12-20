@@ -34,13 +34,21 @@ if (logoutBtn) {
 if (userDataForm) {
   userDataForm.addEventListener('submit', e => {
     e.preventDefault();
+    const form = new FormData();
+
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
-    updateSettings({ name, email }, 'data');
+    const photo = document.getElementById('photo').files[0];
+
+    form.append('name', name);
+    form.append('email', email);
+    form.append('photo', photo);
+
+    updateSettings(form, 'data');
 
     window.setTimeout(() => {
       location.reload(true);
-    }, 5000);
+    }, 3000);
   });
 }
 

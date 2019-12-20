@@ -74,7 +74,6 @@ app.use(
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toUTCString();
-  console.log(req.cookies);
   next();
 });
 
