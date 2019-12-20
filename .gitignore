@@ -8,3 +8,5 @@ tours-simple1.json
 config.env
 public/js/bundle.js
 public/js/bundle.js.map
+public/overview.html
+public/tour.html
